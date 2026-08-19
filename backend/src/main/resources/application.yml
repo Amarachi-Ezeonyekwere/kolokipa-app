@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: kolokipa-backend
+  profiles:
+    active: local

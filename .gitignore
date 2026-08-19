@@ -1,6 +1,5 @@
 # Backend — compiled output, not source
 backend/target/
-backend/.mvn/
 *.class
 
 # Frontend — installed packages and build output, both regenerable
