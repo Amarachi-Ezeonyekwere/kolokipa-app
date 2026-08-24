@@ -5,4 +5,4 @@ spring:
     password: kolokipa_local
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
