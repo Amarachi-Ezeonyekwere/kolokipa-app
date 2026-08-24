@@ -1,8 +1,7 @@
-# frontend/Dockerfile
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN --mount=type=cache,target=/root/.npm npm ci
 COPY . .
 RUN npm run build
 
@@ -11,6 +10,7 @@ WORKDIR /app
 COPY --from=build /app/public ./public
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
-EXPOSE 3000
+ENV HOSTNAME="0.0.0.0"
 ENV PORT=3000
+EXPOSE 3000
 CMD ["node", "server.js"]
