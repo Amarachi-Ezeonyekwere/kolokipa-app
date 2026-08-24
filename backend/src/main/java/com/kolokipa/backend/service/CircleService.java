@@ -6,6 +6,7 @@ import com.kolokipa.backend.entity.Circle;
 import com.kolokipa.backend.repository.CircleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.kolokipa.backend.exception.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class CircleService {
                 .contributionAmount(request.contributionAmount())
                 .cycleFrequency(request.cycleFrequency())
                 .terminologyProfile(request.terminologyProfile())
+                .currency(request.currency())
                 .build();
 
         Circle saved = circleRepository.save(circle);
@@ -36,6 +38,13 @@ public class CircleService {
                 .toList();
     }
 
+    public CircleResponse getCircleById(UUID id) {
+        Circle circle = circleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Circle not found with id: " + id));
+        return toResponse(circle);
+    }
+
     private CircleResponse toResponse(Circle circle) {
         return new CircleResponse(
                 circle.getId(),
@@ -43,6 +52,7 @@ public class CircleService {
                 circle.getContributionAmount(),
                 circle.getCycleFrequency(),
                 circle.getTerminologyProfile(),
+                circle.getCurrency(),
                 circle.getCreatedAt()
         );
     }

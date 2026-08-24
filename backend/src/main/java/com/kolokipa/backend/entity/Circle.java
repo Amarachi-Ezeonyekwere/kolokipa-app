@@ -33,6 +33,9 @@ public class Circle {
 
     @Column(name = "terminology_profile", nullable = false)
     private String terminologyProfile; // e.g. "esusu", "susu", "chama"
+    
+    @Column(nullable = false)
+    private String currency; // e.g. "NGN", "GHS", "KES", "ZAR" 
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;

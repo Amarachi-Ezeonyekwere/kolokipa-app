@@ -19,6 +19,9 @@ public record CircleCreateRequest(
         String cycleFrequency,
 
         @NotBlank(message = "Terminology profile is required")
-        String terminologyProfile
+        String terminologyProfile,
+
+        @NotBlank(message = "Currency is required")
+        String currency
 
 ) {}

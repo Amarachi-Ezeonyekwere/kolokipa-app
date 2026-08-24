@@ -10,5 +10,6 @@ public record CircleResponse(
         BigDecimal contributionAmount,
         String cycleFrequency,
         String terminologyProfile,
+        String currency,
         Instant createdAt
 ) {}
