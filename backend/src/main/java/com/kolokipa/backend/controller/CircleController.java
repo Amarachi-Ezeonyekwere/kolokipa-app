@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.UUID;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/circles")
@@ -27,5 +29,10 @@ public class CircleController {
     @GetMapping
     public ResponseEntity<List<CircleResponse>> getAllCircles() {
         return ResponseEntity.ok(circleService.getAllCircles());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CircleResponse> getCircle(@PathVariable UUID id) {
+        return ResponseEntity.ok(circleService.getCircleById(id));
     }
 }
