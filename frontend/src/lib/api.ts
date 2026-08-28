@@ -22,6 +22,17 @@ export type Member = {
   joinedAt: string;
 };
 
+export type Cycle = {
+  id: string;
+  circleId: string;
+  cycleNumber: number;
+  collectorMemberId: string;
+  collectorName: string;
+  status: string;
+  startDate: string;
+  endDate: string | null;
+};
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     ...options,
@@ -50,6 +61,12 @@ export const api = {
   getMembers: (circleId: string) => request<Member[]>(`/circles/${circleId}/members`),
   addMember: (circleId: string, data: { fullName: string; email: string }) =>
     request<Member>(`/circles/${circleId}/members`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  getCycles: (circleId: string) => request<Cycle[]>(`/circles/${circleId}/cycles`),
+  createCycle: (circleId: string, data: { cycleNumber: number; collectorMemberId: string }) =>
+    request<Cycle>(`/circles/${circleId}/cycles`, {
       method: "POST",
       body: JSON.stringify(data),
     }),
