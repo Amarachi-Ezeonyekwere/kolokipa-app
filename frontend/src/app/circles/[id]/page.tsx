@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { KoloRing } from "@/components/kolo-ring";
 import { Badge } from "@/components/ui/badge";
 import { CreateCycleDialog } from "@/components/create-cycle-dialog";
+import { ContributionList } from "@/components/contribution-list";
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   NGN: "₦",
@@ -20,25 +21,31 @@ export default async function CircleDetailPage({
 }) {
   const { id } = await params;
 
-
   const [circle, members, cycles] = await Promise.all([
-  api.getCircle(id).catch((err) => {
-    console.error("Failed to load circle:", err);
-    return null;
-  }),
-  api.getMembers(id).catch((err) => {
-    console.error("Failed to load members:", err);
-    return [];
-  }),
-  api.getCycles(id).catch((err) => {
-    console.error("Failed to load cycles:", err);
-    return [];
-  }),
-]);
+    api.getCircle(id).catch((err) => {
+      console.error("Failed to load circle:", err);
+      return null;
+    }),
+    api.getMembers(id).catch((err) => {
+      console.error("Failed to load members:", err);
+      return [];
+    }),
+    api.getCycles(id).catch((err) => {
+      console.error("Failed to load cycles:", err);
+      return [];
+    }),
+  ]);
 
   if (!circle) {
     notFound();
   }
+
+  const cyclesWithContributions = await Promise.all(
+    cycles.map(async (cycle) => ({
+      cycle,
+      contributions: await api.getContributions(id, cycle.id).catch(() => []),
+    }))
+  );
 
   const activeCollectorId = cycles.find((c) => c.status !== "COMPLETED")?.collectorMemberId;
 
@@ -72,26 +79,32 @@ export default async function CircleDetailPage({
           <CreateCycleDialog circleId={circle.id} members={members} />
         </div>
 
-        {cycles.length === 0 ? (
+        {cyclesWithContributions.length === 0 ? (
           <div className="rounded-lg border border-dashed border-border py-16 text-center">
             <p className="text-muted-foreground">No cycles yet. Start the first one.</p>
           </div>
         ) : (
-          <div className="space-y-3">
-            {cycles.map((cycle) => (
-              <div
-                key={cycle.id}
-                className="flex items-center justify-between rounded-lg border border-border p-4"
-              >
-                <div>
-                  <p className="font-medium">Cycle {cycle.cycleNumber}</p>
-                  <p className="text-sm text-muted-foreground">
-                    Collector: {cycle.collectorName}
-                  </p>
+          <div className="space-y-6">
+            {cyclesWithContributions.map(({ cycle, contributions }) => (
+              <div key={cycle.id} className="rounded-lg border border-border p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <p className="font-medium">Cycle {cycle.cycleNumber}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Collector: {cycle.collectorName}
+                    </p>
+                  </div>
+                  <Badge variant={cycle.status === "UPCOMING" ? "secondary" : "outline"}>
+                    {cycle.status}
+                  </Badge>
                 </div>
-                <Badge variant={cycle.status === "UPCOMING" ? "secondary" : "outline"}>
-                  {cycle.status}
-                </Badge>
+
+                <ContributionList
+                  circleId={circle.id}
+                  cycleId={cycle.id}
+                  contributions={contributions}
+                  currency={circle.currency}
+                />
               </div>
             ))}
           </div>

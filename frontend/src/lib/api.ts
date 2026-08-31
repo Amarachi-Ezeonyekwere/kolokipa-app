@@ -33,6 +33,17 @@ export type Cycle = {
   endDate: string | null;
 };
 
+export type Contribution = {
+  id: string;
+  cycleId: string;
+  memberId: string;
+  memberName: string;
+  amount: number;
+  status: string;
+  paidAt: string | null;
+  createdAt: string;
+};
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     ...options,
@@ -70,4 +81,11 @@ export const api = {
       method: "POST",
       body: JSON.stringify(data),
     }),
+  getContributions: (circleId: string, cycleId: string) =>
+    request<Contribution[]>(`/circles/${circleId}/cycles/${cycleId}/contributions`),
+  markAsPaid: (circleId: string, cycleId: string, contributionId: string) =>
+    request<Contribution>(
+    `/circles/${circleId}/cycles/${cycleId}/contributions/${contributionId}/pay`,
+    { method: "PATCH" }
+  ),
 };
