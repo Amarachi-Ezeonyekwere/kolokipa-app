@@ -23,6 +23,7 @@ public class CycleService {
 
     private final CycleRepository cycleRepository;
     private final CircleRepository circleRepository;
+    private final ContributionService contributionService;
     private final MemberRepository memberRepository;
 
     public CycleResponse createCycle(UUID circleId, CycleCreateRequest request) {
@@ -48,6 +49,9 @@ public class CycleService {
                 .build();
 
         Cycle saved = cycleRepository.save(cycle);
+
+        List<Member> members = memberRepository.findByCircleId(circleId);
+        contributionService.generateContributionsForCycle(saved, members);
 
         return toResponse(saved);
     }
