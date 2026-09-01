@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface MemberRepository extends JpaRepository<Member, UUID> {
 
     List<Member> findByCircleId(UUID circleId);
+    List<Member> findByCircleIdOrderByJoinedAtAsc(UUID circleId);
 }

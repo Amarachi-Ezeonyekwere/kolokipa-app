@@ -67,6 +67,18 @@ public class ContributionService {
         contribution.setPaidAt(Instant.now());
 
         Contribution saved = contributionRepository.save(contribution);
+
+        List<Contribution> allInCycle = contributionRepository.findByCycleId(cycleId);
+        boolean allPaid = allInCycle.stream()
+                .allMatch(c -> c.getStatus() == ContributionStatus.PAID);
+
+        if (allPaid) {
+            Cycle cycle = contribution.getCycle();
+            cycle.setStatus(CycleStatus.COMPLETED);
+            cycle.setEndDate(Instant.now());
+            cycleRepository.save(cycle);
+        }
+
         return toResponse(saved);
     }
 

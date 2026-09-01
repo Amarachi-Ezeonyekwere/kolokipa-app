@@ -1,9 +1,7 @@
 package com.kolokipa.backend.controller;
 
-import com.kolokipa.backend.dto.CycleCreateRequest;
 import com.kolokipa.backend.dto.CycleResponse;
 import com.kolokipa.backend.service.CycleService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +17,12 @@ public class CycleController {
 
     private final CycleService cycleService;
 
-    @PostMapping
-    public ResponseEntity<CycleResponse> createCycle(
-            @PathVariable UUID circleId,
-            @Valid @RequestBody CycleCreateRequest request) {
 
-        CycleResponse response = cycleService.createCycle(circleId, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    @PostMapping
+    public ResponseEntity<CycleResponse> createCycle(@PathVariable UUID circleId) { 
+    CycleResponse response = cycleService.createCycle(circleId);
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
     }
 
     @GetMapping
