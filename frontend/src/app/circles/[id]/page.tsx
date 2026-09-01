@@ -2,7 +2,7 @@ import { api } from "@/lib/api";
 import { notFound } from "next/navigation";
 import { KoloRing } from "@/components/kolo-ring";
 import { Badge } from "@/components/ui/badge";
-import { CreateCycleDialog } from "@/components/create-cycle-dialog";
+import { StartCycleButton } from "@/components/start-cycle-button";
 import { ContributionList } from "@/components/contribution-list";
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
@@ -76,7 +76,10 @@ export default async function CircleDetailPage({
 
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-display">Cycles</h2>
-          <CreateCycleDialog circleId={circle.id} members={members} />
+          <StartCycleButton
+           circleId={circle.id}
+           disabled={cycles.length > 0 && cycles[cycles.length - 1].status !== "COMPLETED"}
+          />
         </div>
 
         {cyclesWithContributions.length === 0 ? (

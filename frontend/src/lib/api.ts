@@ -76,11 +76,9 @@ export const api = {
       body: JSON.stringify(data),
     }),
   getCycles: (circleId: string) => request<Cycle[]>(`/circles/${circleId}/cycles`),
-  createCycle: (circleId: string, data: { cycleNumber: number; collectorMemberId: string }) =>
-    request<Cycle>(`/circles/${circleId}/cycles`, {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
+  createCycle: (circleId: string) =>
+  request<Cycle>(`/circles/${circleId}/cycles`, { method: "POST" }),
+
   getContributions: (circleId: string, cycleId: string) =>
     request<Contribution[]>(`/circles/${circleId}/cycles/${cycleId}/contributions`),
   markAsPaid: (circleId: string, cycleId: string, contributionId: string) =>
