@@ -4,6 +4,7 @@ import { KoloRing } from "@/components/kolo-ring";
 import { Badge } from "@/components/ui/badge";
 import { StartCycleButton } from "@/components/start-cycle-button";
 import { ContributionList } from "@/components/contribution-list";
+import { CircleSummaryCard } from "@/components/circle-summary-card";
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   NGN: "₦",
@@ -21,7 +22,7 @@ export default async function CircleDetailPage({
 }) {
   const { id } = await params;
 
-  const [circle, members, cycles] = await Promise.all([
+  const [circle, members, cycles, summary, missedPayments] = await Promise.all([
     api.getCircle(id).catch((err) => {
       console.error("Failed to load circle:", err);
       return null;
@@ -34,6 +35,12 @@ export default async function CircleDetailPage({
       console.error("Failed to load cycles:", err);
       return [];
     }),
+    api.getSummary(id).catch((err) => {
+      console.error("Failed to load summary:", err);
+      return null;
+    }),
+   api.getMissedPayments(id).catch(() => []),
+
   ]);
 
   if (!circle) {
@@ -70,6 +77,21 @@ export default async function CircleDetailPage({
           </p>
         </div>
 
+        {summary && <CircleSummaryCard summary={summary} currency={circle.currency} />}
+
+        {missedPayments.length > 0 && (
+        <div className="mb-10 rounded-lg border border-destructive/40 bg-destructive/5 p-4">
+          <p className="font-medium text-destructive mb-2">Missed Payments</p>
+           <div className="space-y-1">
+        {missedPayments.map((mp) => (
+          <p key={mp.contributionId} className="text-sm">
+          {mp.memberName} — Cycle {mp.cycleNumber} — {new Date(mp.dueDate).toLocaleDateString()}
+        </p>
+      ))}
+    </div>
+  </div>
+)}
+
         <div className="flex justify-center mb-12">
           <KoloRing members={ringMembers} />
         </div>
@@ -77,8 +99,8 @@ export default async function CircleDetailPage({
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-display">Cycles</h2>
           <StartCycleButton
-           circleId={circle.id}
-           disabled={cycles.length > 0 && cycles[cycles.length - 1].status !== "COMPLETED"}
+            circleId={circle.id}
+            disabled={cycles.length > 0 && cycles[cycles.length - 1].status !== "COMPLETED"}
           />
         </div>
 

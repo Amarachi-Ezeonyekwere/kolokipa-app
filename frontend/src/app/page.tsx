@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { CreateCircleDialog } from "@/components/create-circle-dialog";
 
+
 const CURRENCY_SYMBOLS: Record<string, string> = {
   NGN: "₦",
   GHS: "₵",

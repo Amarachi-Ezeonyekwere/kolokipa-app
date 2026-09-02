@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { api, type Contribution } from "@/lib/api";
+import Link from "next/link";
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   NGN: "₦",
@@ -50,13 +51,19 @@ export function ContributionList({
           key={c.id}
           className="flex items-center justify-between rounded-md border border-border px-4 py-3"
         >
+
           <div>
-            <p className="font-medium">{c.memberName}</p>
-            <p className="text-sm text-muted-foreground">
-              {symbol}
-              {c.amount.toLocaleString()}
-            </p>
-          </div>
+           <Link
+             href={`/circles/${circleId}/members/${c.memberId}`}
+             className="font-medium hover:underline"
+           >
+             {c.memberName}
+           </Link>
+           <p className="text-sm text-muted-foreground">
+             {symbol}
+             {c.amount.toLocaleString()}
+           </p>
+         </div>
 
           {c.status === "PAID" ? (
             <Badge variant="secondary">PAID</Badge>

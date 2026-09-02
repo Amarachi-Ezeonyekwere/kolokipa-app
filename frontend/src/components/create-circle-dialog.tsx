@@ -16,12 +16,12 @@ import {
 import { api } from "@/lib/api";
 
 const CIRCLE_OPTIONS = [
-  { value: "esusu", label: "Esusu (Nigeria)", currency: "NGN", symbol: "₦" },
-  { value: "susu", label: "Susu (Ghana)", currency: "GHS", symbol: "₵" },
-  { value: "chama", label: "Chama (Kenya)", currency: "KES", symbol: "KSh" },
-  { value: "stokvel", label: "Stokvel (South Africa)", currency: "ZAR", symbol: "R" },
-  { value: "tontine", label: "Tontine (Senegal/Francophone West Africa)", currency: "XOF", symbol: "CFA" },
-  { value: "equb", label: "Equb (Ethiopia)", currency: "ETB", symbol: "Br" },
+  { value: "esusu", label: "Esusu (Nigeria)", currency: "NGN", symbol: "₦", timezone: "Africa/Lagos" },
+  { value: "susu", label: "Susu (Ghana)", currency: "GHS", symbol: "₵", timezone: "Africa/Accra" },
+  { value: "chama", label: "Chama (Kenya)", currency: "KES", symbol: "KSh", timezone: "Africa/Nairobi" },
+  { value: "stokvel", label: "Stokvel (South Africa)", currency: "ZAR", symbol: "R", timezone: "Africa/Johannesburg" },
+  { value: "tontine", label: "Tontine (Senegal/Francophone West Africa)", currency: "XOF", symbol: "CFA", timezone: "Africa/Dakar" },
+  { value: "equb", label: "Equb (Ethiopia)", currency: "ETB", symbol: "Br", timezone: "Africa/Addis_Ababa" },
 ];
 
 export function CreateCircleDialog() {
@@ -41,6 +41,7 @@ export function CreateCircleDialog() {
         cycleFrequency: formData.get("cycleFrequency") as string,
         terminologyProfile: selectedProfile.value,
         currency: selectedProfile.currency,
+        timezone: selectedProfile.timezone,
       });
       setOpen(false);
       router.refresh();

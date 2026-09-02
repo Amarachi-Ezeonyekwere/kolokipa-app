@@ -10,6 +10,7 @@ export type Circle = {
   cycleFrequency: string;
   terminologyProfile: string;
   currency: string;
+  timezone: string;
   createdAt: string;
 };
 
@@ -31,6 +32,7 @@ export type Cycle = {
   status: string;
   startDate: string;
   endDate: string | null;
+  dueDate: string | null;
 };
 
 export type Contribution = {
@@ -42,6 +44,33 @@ export type Contribution = {
   status: string;
   paidAt: string | null;
   createdAt: string;
+};
+
+export type CircleSummary = {
+  circleId: string;
+  totalMembers: number;
+  completedCycles: number;
+  upcomingCycles: number;
+  totalCollected: number;
+  totalExpected: number;
+  completionRatePercent: number;
+};
+
+export type MemberContribution = {
+  contributionId: string;
+  cycleNumber: number;
+  amount: number;
+  status: string;
+  paidAt: string | null;
+};
+
+export type MissedPayment = {
+  contributionId: string;
+  memberId: string;
+  memberName: string;
+  cycleNumber: number;
+  amount: number;
+  dueDate: string;
 };
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
@@ -68,6 +97,7 @@ export const api = {
     cycleFrequency: string;
     terminologyProfile: string;
     currency: string;
+    timezone: string;
   }) => request<Circle>("/circles", { method: "POST", body: JSON.stringify(data) }),
   getMembers: (circleId: string) => request<Member[]>(`/circles/${circleId}/members`),
   addMember: (circleId: string, data: { fullName: string; email: string }) =>
@@ -86,4 +116,13 @@ export const api = {
     `/circles/${circleId}/cycles/${cycleId}/contributions/${contributionId}/pay`,
     { method: "PATCH" }
   ),
+  
+  getSummary: (circleId: string) => request<CircleSummary>(`/circles/${circleId}/summary`),
+  getMemberHistory: (circleId: string, memberId: string) =>
+    request<MemberContribution[]>(`/circles/${circleId}/members/${memberId}/contributions`),
+
+
+  getMissedPayments: (circleId: string) =>
+    request<MissedPayment[]>(`/circles/${circleId}/missed-payments`),
+
 };
