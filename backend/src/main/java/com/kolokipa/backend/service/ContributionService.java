@@ -94,4 +94,26 @@ public class ContributionService {
                 contribution.getCreatedAt()
         );
     }
+    
+    public int sweepMissedContributionsForCircle(UUID circleId) {
+    return sweep(contributionRepository.findByCycle_Circle_IdAndStatus(circleId, ContributionStatus.PENDING));
+    }
+
+    public int sweepAllMissedContributions() {
+    return sweep(contributionRepository.findByStatus(ContributionStatus.PENDING));
+    }
+
+    private int sweep(List<Contribution> pending) {
+    Instant now = Instant.now();
+    int count = 0;
+    for (Contribution c : pending) {
+        Instant dueDate = c.getCycle().getDueDate();
+        if (dueDate != null && now.isAfter(dueDate)) {
+            c.setStatus(ContributionStatus.MISSED);
+            contributionRepository.save(c);
+            count++;
+        }
+    }
+    return count;
+    }
 }
