@@ -16,6 +16,11 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import java.util.Optional;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
+
+
 
 @Service
 @RequiredArgsConstructor
@@ -62,6 +67,13 @@ public class CycleService {
             .findFirst()
             .orElseThrow(() -> new IllegalStateException(
                     "No member found for payout position " + expectedPosition));
+    
+    ZoneId zone = ZoneId.of(circle.getTimezone());
+    ZonedDateTime zonedStart = Instant.now().atZone(zone);
+    ZonedDateTime zonedDue = "WEEKLY".equals(circle.getCycleFrequency())
+        ? zonedStart.plusWeeks(1)
+        : zonedStart.plusMonths(1);
+    Instant dueDate = zonedDue.toInstant();
 
     Cycle cycle = Cycle.builder()
             .circle(circle)
@@ -69,6 +81,7 @@ public class CycleService {
             .collector(collector)
             .status(CycleStatus.UPCOMING)
             .startDate(Instant.now())
+            .dueDate(dueDate)
             .build();
 
     Cycle saved = cycleRepository.save(cycle);
@@ -98,7 +111,8 @@ public class CycleService {
                 cycle.getCollector().getFullName(),
                 cycle.getStatus().name(),
                 cycle.getStartDate(),
-                cycle.getEndDate()
+                cycle.getEndDate(),
+                cycle.getDueDate()
         );
     }
 }

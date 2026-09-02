@@ -1,0 +1,2 @@
+ALTER TABLE circles ADD COLUMN timezone VARCHAR(255) NOT NULL DEFAULT 'Africa/Lagos';
+ALTER TABLE cycles ADD COLUMN due_date TIMESTAMP;

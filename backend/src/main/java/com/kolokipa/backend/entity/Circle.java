@@ -37,6 +37,9 @@ public class Circle {
     @Column(nullable = false)
     private String currency; // e.g. "NGN", "GHS", "KES", "ZAR" 
 
+    @Column(nullable = false)
+    private String timezone; // IANA zone id, e.g. "Africa/Lagos"
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 

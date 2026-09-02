@@ -11,5 +11,6 @@ public record CircleResponse(
         String cycleFrequency,
         String terminologyProfile,
         String currency,
+        String timezone,
         Instant createdAt
 ) {}

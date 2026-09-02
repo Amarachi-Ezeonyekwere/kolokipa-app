@@ -22,6 +22,9 @@ public record CircleCreateRequest(
         String terminologyProfile,
 
         @NotBlank(message = "Currency is required")
-        String currency
+        String currency,
+
+        @NotBlank(message = "Timezone is required")
+        String timezone
 
 ) {}

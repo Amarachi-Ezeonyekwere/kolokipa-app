@@ -41,4 +41,7 @@ public class Cycle {
 
     @Column(name = "end_date")
     private Instant endDate;
+
+    @Column(name = "due_date")
+    private Instant dueDate;
 }

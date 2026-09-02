@@ -11,5 +11,6 @@ public record CycleResponse(
         String collectorName,
         String status,
         Instant startDate,
-        Instant endDate
+        Instant endDate,
+        Instant dueDate
 ) {}

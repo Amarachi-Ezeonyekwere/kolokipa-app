@@ -24,6 +24,7 @@ public class CircleService {
                 .cycleFrequency(request.cycleFrequency())
                 .terminologyProfile(request.terminologyProfile())
                 .currency(request.currency())
+                .timezone(request.timezone())
                 .build();
 
         Circle saved = circleRepository.save(circle);
@@ -53,6 +54,7 @@ public class CircleService {
                 circle.getCycleFrequency(),
                 circle.getTerminologyProfile(),
                 circle.getCurrency(),
+                circle.getTimezone(),
                 circle.getCreatedAt()
         );
     }
