@@ -4,6 +4,8 @@ import com.kolokipa.backend.dto.CircleCreateRequest;
 import com.kolokipa.backend.dto.CircleResponse;
 import com.kolokipa.backend.entity.Circle;
 import com.kolokipa.backend.repository.CircleRepository;
+import com.kolokipa.backend.security.CurrentUserProvider;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.kolokipa.backend.exception.ResourceNotFoundException;
@@ -16,9 +18,13 @@ import java.util.UUID;
 public class CircleService {
 
     private final CircleRepository circleRepository;
+    private final CurrentUserProvider currentUserProvider;
 
     public CircleResponse createCircle(CircleCreateRequest request) {
+        UUID ownerId = currentUserProvider.getCurrentUserId();
+
         Circle circle = Circle.builder()
+                .ownerId(ownerId)
                 .name(request.name())
                 .contributionAmount(request.contributionAmount())
                 .cycleFrequency(request.cycleFrequency())
@@ -33,7 +39,9 @@ public class CircleService {
     }
 
     public List<CircleResponse> getAllCircles() {
-        return circleRepository.findAll()
+        UUID ownerId = currentUserProvider.getCurrentUserId();
+
+        return circleRepository.findByOwnerId(ownerId)
                 .stream()
                 .map(this::toResponse)
                 .toList();
