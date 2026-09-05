@@ -3,3 +3,7 @@ spring:
     name: kolokipa-backend
   profiles:
     active: local
+
+jwt:
+  secret: "change-this-to-a-long-random-string-at-least-32-characters-for-security"
+  expiration-minutes: 1440
