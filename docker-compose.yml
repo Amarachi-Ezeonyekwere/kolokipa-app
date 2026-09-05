@@ -26,6 +26,7 @@ services:
     container_name: kolokipa-backend
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - "8080:8080"
     depends_on:

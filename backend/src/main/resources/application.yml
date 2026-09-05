@@ -5,5 +5,5 @@ spring:
     active: local
 
 jwt:
-  secret: "change-this-to-a-long-random-string-at-least-32-characters-for-security"
+  secret: ${JWT_SECRET}
   expiration-minutes: 1440
