@@ -31,6 +31,9 @@ public class Member {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(name = "user_id")
+    private UUID userId;
+
     @Column(name = "payout_position")
     private Integer payoutPosition;
 

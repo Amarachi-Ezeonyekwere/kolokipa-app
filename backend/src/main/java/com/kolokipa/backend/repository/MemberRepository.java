@@ -10,4 +10,5 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
 
     List<Member> findByCircleId(UUID circleId);
     List<Member> findByCircleIdOrderByJoinedAtAsc(UUID circleId);
+    List<Member> findByEmailAndUserIdIsNull(String email);
 }

@@ -17,6 +17,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final MemberService memberService;
+
 
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.findByEmail(request.email()).isPresent()) {
@@ -30,6 +32,8 @@ public class AuthService {
                 .build();
 
         User saved = userRepository.save(user);
+
+        memberService.linkExistingMembersToUser(saved.getEmail(), saved.getId());
 
         String token = jwtService.generateToken(saved.getId(), saved.getEmail());
 

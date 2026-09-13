@@ -39,18 +39,29 @@ public class CircleService {
     }
 
     public List<CircleResponse> getAllCircles() {
-        UUID ownerId = currentUserProvider.getCurrentUserId();
+        UUID userId = currentUserProvider.getCurrentUserId();
 
-        return circleRepository.findByOwnerId(ownerId)
+        return circleRepository.findAccessibleByUserId(userId)
                 .stream()
                 .map(this::toResponse)
                 .toList();
     }
 
     public CircleResponse getCircleById(UUID id) {
+        UUID userId = currentUserProvider.getCurrentUserId();
+
         Circle circle = circleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Circle not found with id: " + id));
+
+        boolean hasAccess = circleRepository.findAccessibleByUserId(userId)
+                .stream()
+                .anyMatch(c -> c.getId().equals(id));
+
+        if (!hasAccess) {
+            throw new ResourceNotFoundException("Circle not found with id: " + id);
+        }
+
         return toResponse(circle);
     }
 

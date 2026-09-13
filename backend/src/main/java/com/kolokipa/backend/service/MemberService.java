@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import com.kolokipa.backend.entity.User;
+import com.kolokipa.backend.repository.UserRepository;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,16 +22,19 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final CircleRepository circleRepository;
+    private final UserRepository userRepository;
 
     public MemberResponse addMemberToCircle(UUID circleId, MemberCreateRequest request) {
         Circle circle = circleRepository.findById(circleId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Circle not found with id: " + circleId));
 
+        Optional<User> existingUser = userRepository.findByEmail(request.email());
         Member member = Member.builder()
                 .circle(circle)
                 .fullName(request.fullName())
                 .email(request.email())
+                .userId(existingUser.map(User::getId).orElse(null))
                 .build();
 
         Member saved = memberRepository.save(member);
@@ -60,4 +66,11 @@ public class MemberService {
                 member.getJoinedAt()
         );
     }
+    public void linkExistingMembersToUser(String email, UUID userId) {
+    List<Member> unlinkedMembers = memberRepository.findByEmailAndUserIdIsNull(email);
+    for (Member member : unlinkedMembers) {
+        member.setUserId(userId);
+    }
+    memberRepository.saveAll(unlinkedMembers);
+   }
 }
