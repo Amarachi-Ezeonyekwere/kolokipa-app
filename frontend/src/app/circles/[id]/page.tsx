@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { StartCycleButton } from "@/components/start-cycle-button";
 import { ContributionList } from "@/components/contribution-list";
 import { CircleSummaryCard } from "@/components/circle-summary-card";
+import { getServerToken } from "@/lib/auth-server";
+import { AddMemberDialog } from "@/components/add-member-dialog";
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   NGN: "₦",
@@ -22,24 +24,26 @@ export default async function CircleDetailPage({
 }) {
   const { id } = await params;
 
+  const token = await getServerToken();
+
   const [circle, members, cycles, summary, missedPayments] = await Promise.all([
-    api.getCircle(id).catch((err) => {
+    api.getCircle(id, token).catch((err) => {
       console.error("Failed to load circle:", err);
       return null;
     }),
-    api.getMembers(id).catch((err) => {
+    api.getMembers(id, token).catch((err) => {
       console.error("Failed to load members:", err);
       return [];
     }),
-    api.getCycles(id).catch((err) => {
+    api.getCycles(id, token).catch((err) => {
       console.error("Failed to load cycles:", err);
       return [];
     }),
-    api.getSummary(id).catch((err) => {
+    api.getSummary(id, token).catch((err) => {
       console.error("Failed to load summary:", err);
       return null;
     }),
-   api.getMissedPayments(id).catch(() => []),
+   api.getMissedPayments(id, token).catch(() => []),
 
   ]);
 
@@ -50,7 +54,7 @@ export default async function CircleDetailPage({
   const cyclesWithContributions = await Promise.all(
     cycles.map(async (cycle) => ({
       cycle,
-      contributions: await api.getContributions(id, cycle.id).catch(() => []),
+      contributions: await api.getContributions(id, cycle.id, token).catch(() => []),
     }))
   );
 
@@ -91,6 +95,11 @@ export default async function CircleDetailPage({
     </div>
   </div>
 )}
+
+
+        <div className="flex justify-end mb-4">
+          <AddMemberDialog circleId={circle.id} />
+        </div>
 
         <div className="flex justify-center mb-12">
           <KoloRing members={ringMembers} />

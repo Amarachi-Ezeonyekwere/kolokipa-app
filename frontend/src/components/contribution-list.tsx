@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { api, type Contribution } from "@/lib/api";
 import Link from "next/link";
+import { getClientToken } from "@/lib/auth";
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   NGN: "₦",
@@ -33,7 +34,7 @@ export function ContributionList({
   async function handleMarkPaid(contributionId: string) {
     setPayingId(contributionId);
     try {
-      await api.markAsPaid(circleId, cycleId, contributionId);
+      await api.markAsPaid(circleId, cycleId, contributionId, getClientToken());
       router.refresh();
     } catch (err) {
       console.error("Failed to mark as paid:", err);

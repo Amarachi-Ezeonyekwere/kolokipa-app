@@ -1,6 +1,7 @@
 import { api } from "@/lib/api";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { getServerToken } from "@/lib/auth-server";
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   NGN: "₦", GHS: "₵", KES: "KSh", ZAR: "R", XOF: "CFA", ETB: "Br",
@@ -12,10 +13,11 @@ export default async function MemberHistoryPage({
   params: Promise<{ id: string; memberId: string }>;
 }) {
   const { id, memberId } = await params;
+  const token = await getServerToken();
 
   const [circle, history] = await Promise.all([
-    api.getCircle(id).catch(() => null),
-    api.getMemberHistory(id, memberId).catch(() => []),
+    api.getCircle(id, token).catch(() => null),
+    api.getMemberHistory(id, memberId, token).catch(() => []),
   ]);
 
   if (!circle) {

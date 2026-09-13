@@ -14,6 +14,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { api } from "@/lib/api";
+import { getClientToken } from "@/lib/auth";
 
 const CIRCLE_OPTIONS = [
   { value: "esusu", label: "Esusu (Nigeria)", currency: "NGN", symbol: "₦", timezone: "Africa/Lagos" },
@@ -42,7 +43,7 @@ export function CreateCircleDialog() {
         terminologyProfile: selectedProfile.value,
         currency: selectedProfile.currency,
         timezone: selectedProfile.timezone,
-      });
+      },getClientToken());
       setOpen(false);
       router.refresh();
     } catch (err) {

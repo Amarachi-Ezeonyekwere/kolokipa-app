@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
+import { getClientToken } from "@/lib/auth";
 
 export function StartCycleButton({
   circleId,
@@ -20,7 +21,7 @@ export function StartCycleButton({
     setLoading(true);
     setError(null);
     try {
-      await api.createCycle(circleId);
+      await api.createCycle(circleId, getClientToken());
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
