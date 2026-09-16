@@ -101,9 +101,18 @@ export default async function CircleDetailPage({
           <AddMemberDialog circleId={circle.id} />
         </div>
 
+        {members.length === 0 ? (
+          <div className="rounded-lg border border-dashed border-border py-16 text-center mb-12">
+            <p className="text-lg font-display mb-2">No members yet</p>
+            <p className="text-muted-foreground">
+              Add the people in your circle to start tracking contributions.
+            </p>
+          </div>
+          ) : (
         <div className="flex justify-center mb-12">
           <KoloRing members={ringMembers} />
         </div>
+        )}
 
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-display">Cycles</h2>
@@ -113,9 +122,13 @@ export default async function CircleDetailPage({
           />
         </div>
 
+
         {cyclesWithContributions.length === 0 ? (
           <div className="rounded-lg border border-dashed border-border py-16 text-center">
-            <p className="text-muted-foreground">No cycles yet. Start the first one.</p>
+            <p className="text-lg font-display mb-2">No cycles yet</p>
+            <p className="text-muted-foreground">
+              Start the first cycle once every member has joined.
+            </p>
           </div>
         ) : (
           <div className="space-y-6">

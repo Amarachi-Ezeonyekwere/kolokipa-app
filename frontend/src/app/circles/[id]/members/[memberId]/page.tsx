@@ -33,8 +33,14 @@ export default async function MemberHistoryPage({
         <p className="text-muted-foreground mb-8">{circle.name}</p>
 
         {history.length === 0 ? (
-          <p className="text-muted-foreground">No contribution history yet.</p>
+          <div className="rounded-lg border border-dashed border-border py-16 text-center">
+            <p className="text-lg font-display mb-2">No history yet</p>
+            <p className="text-muted-foreground">
+              This member's contribution history will appear once a cycle starts.
+            </p>
+            </div>
         ) : (
+          
           <div className="space-y-2">
             {history.map((h) => (
               <div
