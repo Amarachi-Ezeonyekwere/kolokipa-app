@@ -30,7 +30,7 @@ export default async function Home() {
               Traditional savings. Modern accountability.
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
           <LogoutButton />
           <CreateCircleDialog />
           </div>
