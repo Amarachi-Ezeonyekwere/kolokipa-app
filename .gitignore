@@ -11,3 +11,4 @@ frontend/.env*.local
 .env
 .DS_Store
 *.log
+.vscode/
