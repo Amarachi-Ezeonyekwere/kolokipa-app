@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/kolokipa
+    username: kolokipa
+    password: kolokipa_local
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+jwt:
+  secret: "test-only-secret-never-used-in-real-deployment-32chars-min"
+  expiration-minutes: 1440
