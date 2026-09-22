@@ -48,7 +48,7 @@ A layered backend (Controller → Service → Repository → Entity) with
 every layer depending only on the one directly beneath it, and a
 Next.js frontend split between server components (data fetching) and
 client components (interactivity). Every significant architectural
-decision — and the reasoning behind it — is documented as it was made
+decision and the reasoning behind it, is documented as it was made
 in [`docs/adr/`](docs/adr/), numbered sequentially from project start.
 
 ---
@@ -108,8 +108,8 @@ cd backend
 ./mvnw test
 ```
 
-Unit tests cover the two areas of genuine business-logic risk — payout
-rotation fairness and contribution auto-completion — using Mockito to
+Unit tests cover the two areas of genuine business-logic risk payout
+rotation fairness and contribution auto-completion using Mockito to
 isolate each service from its real dependencies. See
 [`docs/adr/0026-unit-testing-scope.md`](docs/adr/0026-unit-testing-scope.md)
 for what's covered and what's deliberately deferred.
@@ -117,6 +117,7 @@ for what's covered and what's deliberately deferred.
 ---
 
 ## Project structure
+```
 kolokipa-app/
 ├── backend/ Spring Boot API
 │ └── src/main/java/com/kolokipa/backend/
@@ -138,7 +139,7 @@ kolokipa-app/
 │ ├── BUSINESS_VALUE.md What problem this solves and why
 │ └── FUTURE_IMPROVEMENTS.md Known, deliberate scope gaps
 └── docker-compose.yml
-
+```
 
 ## Documentation
 
