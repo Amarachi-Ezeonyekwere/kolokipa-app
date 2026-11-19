@@ -1,0 +1,31 @@
+# Active on AWS (SPRING_PROFILES_ACTIVE=aws). Nothing secret lives in this file:
+# every value arrives as an environment variable from the ECS task definition,
+# which pulls the credentials out of Secrets Manager. A missing variable fails
+# the startup immediately instead of the app running half-configured.
+
+server:
+  servlet:
+    # The ALB forwards /api/* to this service. Serving everything under /api
+    # means the browser calls the same address as the website, so no CORS.
+    context-path: /api
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate # Flyway owns the schema; Hibernate only checks it matches
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

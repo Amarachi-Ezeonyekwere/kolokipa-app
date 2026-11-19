@@ -34,6 +34,11 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
+                // The load balancer health-checks the app without a login token.
+                // Only the health endpoint is public; no other actuator endpoint is exposed.
+                .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
+                // Lets Spring render real 404s; without this, a missing path is masked as 403.
+                .requestMatchers("/error").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
             )
