@@ -1,13 +1,18 @@
-# Stage 1: compile the app using the full Maven+JDK toolchain
+# Stage 1: compile with the full Maven + JDK toolchain
 FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
-COPY pom.xml .
-COPY src ./src
-RUN --mount=type=cache,target=/root/.m2 mvn clean package -DskipTests
 
-# Stage 2: run it with just a lightweight JRE — no build tools included
+COPY pom.xml .
+RUN mvn -B dependency:go-offline
+
+COPY src ./src
+RUN mvn -B clean package -DskipTests
+
+# Stage 2: run with just a JRE, as an unprivileged user
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
+RUN addgroup -S app && adduser -S -G app app
 COPY --from=build /app/target/*.jar app.jar
+USER app
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
