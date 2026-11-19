@@ -36,7 +36,7 @@ export default async function MemberHistoryPage({
           <div className="rounded-lg border border-dashed border-border py-16 text-center">
             <p className="text-lg font-display mb-2">No history yet</p>
             <p className="text-muted-foreground">
-              This member's contribution history will appear once a cycle starts.
+              This member&apos;s contribution history will appear once a cycle starts.
             </p>
             </div>
         ) : (
